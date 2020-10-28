@@ -3,3 +3,7 @@ dlib
 face_recognition
 numpy
 opencv-python
+python-slugify
+bs4
+lxml
+python3-flask
