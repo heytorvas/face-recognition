@@ -22,3 +22,8 @@
 # ''')
 
 # conn.commit()
+
+from face_rec import get_encoded_faces_database, classify_face
+
+# print(classify_face('test.jpg'))
+get_encoded_faces_database()

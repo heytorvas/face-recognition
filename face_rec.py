@@ -1,8 +1,23 @@
-import os, cv2, face_recognition
+import os, cv2, face_recognition, sqlite3
 import numpy as np
 import face_recognition as fr
 from util import reverse_slug
 
+def writeTofile(data, filename):
+    filename = '{}.jpg'.format(filename)
+    with open('faces/{}'.format(filename),'wb') as file:
+        file.write(data)
+
+def get_encoded_faces_database():
+    con = sqlite3.connect("database.db")
+    cursor = con.cursor()
+    cursor.execute('''SELECT * from file_contents''')
+    record = cursor.fetchall()
+    for row in record:
+        print("Id= ", row[0], "Name= ", row[1])
+        writeTofile(row[2], row[1])
+
+    cursor.close()
 
 def get_encoded_faces():
     encoded = {}

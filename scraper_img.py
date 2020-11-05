@@ -10,6 +10,7 @@ def save_image_database(name, data):
     # sql = '''INSERT INTO file_contents (name, data) VALUES (?, ?)'''
     # cursor.execute(sql, (name, data))
     con.commit()
+    cursor.close()
 
 def get_body_site(url, uri):
     return requests.get('{}{}'.format(url, uri)).text
