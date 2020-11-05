@@ -1,8 +1,7 @@
-import face_recognition as fr
-import os
-import cv2
-import face_recognition
+import os, cv2, face_recognition
 import numpy as np
+import face_recognition as fr
+from util import reverse_slug
 
 
 def get_encoded_faces():
@@ -47,7 +46,7 @@ def classify_face(im):
         if matches[best_match_index]:
             name = known_face_names[best_match_index]
 
-        face_names.append(name)
+        face_names.append(reverse_slug(name))
 
         # for (top, right, bottom, left), name in zip(face_locations, face_names):
         #     # Draw a box around the face
@@ -67,6 +66,3 @@ def classify_face(im):
     #         return face_names 
 
     return face_names
-
-
-print(classify_face("test_both.jpg"))
