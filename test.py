@@ -1,13 +1,24 @@
-# from slugify import slugify
-from util import reverse_slug
+# name = 'Daniel Dantas (actor brazilian actress)'
 
-# txt = "This is a test ---"
-# print(slugify(txt))
+# bad_words = ['actor', 'brazilian', 'actress']
 
+# for word in bad_words:
+#     if word in name.lower():
+#         name = name.replace(word, '')
 
-array = ['unknown']
-new_array = []
-for i in array:
-    new_array.append(reverse_slug(i))
+# print(name)
 
-print(new_array)
+# import sqlite3
+# conn = sqlite3.connect('database.db')
+# cursor = conn.cursor()
+
+# cursor.execute('''
+#     CREATE TABLE file_contents (
+#         id INTEGER NOT NULL, 
+#         name VARCHAR(300), 
+#         data BLOB, 
+#         PRIMARY KEY (id)
+#     )
+# ''')
+
+# conn.commit()

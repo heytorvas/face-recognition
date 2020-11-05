@@ -1,6 +1,15 @@
-import requests, re, shutil
+import requests, re, shutil, sqlite3
 from bs4 import BeautifulSoup
 from slugify import slugify
+from util import remove_bad_words
+
+def save_image_database(name, data):
+    con = sqlite3.connect("database.db")
+    cursor = con.cursor()
+    cursor.execute('''INSERT INTO file_contents (name, data) VALUES (?, ?)''', (name, data))
+    # sql = '''INSERT INTO file_contents (name, data) VALUES (?, ?)'''
+    # cursor.execute(sql, (name, data))
+    con.commit()
 
 def get_body_site(url, uri):
     return requests.get('{}{}'.format(url, uri)).text
@@ -18,16 +27,21 @@ def get_images_site(url, uri):
 
 def save_images(href, name):
     image_url = 'https://{}'.format(href)
-    filename = '{}.jpg'.format(slugify(name))
     r = requests.get(image_url, stream = True)
 
     if r.status_code == 200:
         r.raw.decode_content = True
         
-        with open('faces/{}'.format(filename),'wb') as f:
-            shutil.copyfileobj(r.raw, f)
+        filename = slugify(name)
+        save_image_database(filename, r.content)
+
+        # save image locally
+
+        # filename = '{}.jpg'.format(slugify(name))
+        # with open('faces/{}'.format(filename),'wb') as f:
+        #     shutil.copyfileobj(r.raw, f)
             
-        print('Image sucessfully Downloaded: ',filename)
+        print('Image sucessfully Downloaded: ', filename)
     else:
         print('Image Couldn\'t be retreived')
 
@@ -43,7 +57,7 @@ def get_href_names(text):
                 if '(page does not exist)' not in j['title'] and 'Edit' not in j['title']:
                     href_list.append(
                         {
-                            "name": j['title'],
+                            "name": remove_bad_words(j['title']),
                             "href": j['href']
                         }
                     )
