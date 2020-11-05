@@ -5,13 +5,16 @@ app = Flask(__name__)
 
 app.config["IMAGE_UPLOADS"] = "{}".format(os.getcwd())
 
-@app.route("/upload-image", methods=["GET", "POST"])
-def upload_image():
+@app.route("/", methods=["GET", "POST"])
+def home():
     if request.method == "POST":
         if request.files:
             image = request.files["image"]
             print(image)
             image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
-            return redirect(request.url)
+            return render_template("response.html")
+    return render_template("index.html")
 
-    return render_template("upload_image.html")
+@app.route("/response", methods=["GET", "POST"])
+def response():
+    return render_template("response.html")
