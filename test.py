@@ -23,7 +23,9 @@
 
 # conn.commit()
 
-from face_rec import get_encoded_faces_database, classify_face
+from face_rec import get_encoded_faces_database, classify_face, os, shutil
+# import six
+# print(six.MAXSIZE)
 
 # print(classify_face('test.jpg'))
-get_encoded_faces_database()
+# get_encoded_faces_database()

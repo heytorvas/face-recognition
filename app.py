@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, redirect
+from flask import Flask, jsonify, request, render_template
 from face_rec import classify_face
 import os
 

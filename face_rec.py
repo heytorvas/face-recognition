@@ -1,4 +1,4 @@
-import os, cv2, face_recognition, sqlite3
+import os, cv2, face_recognition, sqlite3, shutil
 import numpy as np
 import face_recognition as fr
 from util import reverse_slug
@@ -20,15 +20,21 @@ def get_encoded_faces_database():
     cursor.close()
 
 def get_encoded_faces():
-    encoded = {}
+    os.mkdir('faces')
+    get_encoded_faces_database()
 
+    encoded = {}
     for dirpath, dnames, fnames in os.walk("./faces"):
         for f in fnames:
             if f.endswith(".jpg") or f.endswith(".png"):
                 face = fr.load_image_file("faces/" + f)
-                encoding = fr.face_encodings(face)[0]
-                encoded[f.split(".")[0]] = encoding
-
+                try:
+                    encoding = fr.face_encodings(face)[0]
+                    encoded[f.split(".")[0]] = encoding
+                except:
+                    pass
+    
+    shutil.rmtree('{}/faces'.format(os.getcwd()))
     return encoded
 
 
@@ -79,5 +85,4 @@ def classify_face(im):
     #     cv2.imshow('Video', img)
     #     if cv2.waitKey(1) & 0xFF == ord('q'):
     #         return face_names 
-
     return face_names
