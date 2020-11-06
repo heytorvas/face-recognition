@@ -2,6 +2,30 @@ import os, cv2, face_recognition, sqlite3, shutil
 import numpy as np
 import face_recognition as fr
 from util import reverse_slug
+import threading
+
+class Thread:
+    def __init__(self, images_list):
+        self.encoded = {}
+        self.images_list = images_list
+
+    def encode_face(self, f):
+        try:
+            face = fr.load_image_file("faces/" + f)
+            encoding = fr.face_encodings(face)[0]
+            self.encoded[f.split(".")[0]] = encoding
+
+        except Exception as e:
+            print(e)
+
+    def manageThread(self):
+        counter = 0
+
+        while counter < len(self.images_list):
+            if threading.active_count() <= 100:
+                t = threading.Thread(target=self.encode_face, args=(self.images_list[counter],))
+                t.start()
+                counter = counter + 1
 
 def writeTofile(data, filename):
     filename = '{}.jpg'.format(filename)
@@ -23,16 +47,17 @@ def get_encoded_faces():
     os.mkdir('faces')
     get_encoded_faces_database()
 
-    encoded = {}
+    lista_imagens = []
+
     for dirpath, dnames, fnames in os.walk("./faces"):
         for f in fnames:
             if f.endswith(".jpg") or f.endswith(".png"):
-                face = fr.load_image_file("faces/" + f)
-                try:
-                    encoding = fr.face_encodings(face)[0]
-                    encoded[f.split(".")[0]] = encoding
-                except:
-                    pass
+                lista_imagens.append(f)
+
+
+    thread = Thread(lista_imagens)
+    thread.manageThread()
+    encoded = thread.encoded
     
     shutil.rmtree('{}/faces'.format(os.getcwd()))
     return encoded
